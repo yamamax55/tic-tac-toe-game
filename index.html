@@ -536,6 +536,14 @@
             cell.textContent = currentPlayer === 'O' ? '◯' : '×';
             cell.classList.add(currentPlayer.toLowerCase());
             cell.disabled = true;
+            
+            // シンボル配置時のアニメーション
+            cell.classList.add('bounce-in');
+            
+            // アニメーション終了後にクラスを除去
+            setTimeout(() => {
+                cell.classList.remove('bounce-in');
+            }, 600);
         }
 
         function changePlayer() {
@@ -551,23 +559,34 @@
 
         function checkResult() {
             let roundWon = false;
+            let winningLine = null;
+            
             for (let i = 0; i < winningConditions.length; i++) {
                 const [a, b, c] = winningConditions[i];
                 if (gameBoard[a] && gameBoard[a] === gameBoard[b] && gameBoard[a] === gameBoard[c]) {
                     roundWon = true;
+                    winningLine = [a, b, c];
                     break;
                 }
             }
 
             if (roundWon) {
+                // 勝利セルのアニメーション
+                highlightWinningCells(winningLine);
+                
                 let winnerText;
                 if (gameMode === 'cpu') {
                     winnerText = currentPlayer === playerSymbol ? '人間の勝利！' : 'CPUの勝利！';
                 } else {
                     winnerText = `${currentPlayer === 'O' ? '◯' : '×'}の勝利！`;
                 }
-                announceWinner(winnerText);
-                playWinSound(); // Play win sound
+                
+                // 少し遅延させて勝利発表
+                setTimeout(() => {
+                    announceWinner(winnerText);
+                    playWinSound();
+                }, 500);
+                
                 gameActive = false;
                 updateScore(currentPlayer);
                 disableAllCells();
@@ -591,16 +610,30 @@
             return false;
         }
 
+        function highlightWinningCells(winningLine) {
+            winningLine.forEach((cellIndex, index) => {
+                const cell = document.querySelector(`[data-index="${cellIndex}"]`);
+                setTimeout(() => {
+                    cell.classList.add('winning-cell');
+                }, index * 100); // 順番に光らせる
+            });
+        }
+
         function announceWinner(message) {
             const announcement = document.getElementById('winnerAnnouncement');
             announcement.textContent = message;
             announcement.style.display = 'block';
             
             if (message.includes('引き分け')) {
-                announcement.className = 'winner-announcement draw';
+                announcement.className = 'winner-announcement draw animate';
             } else {
-                announcement.className = 'winner-announcement winner';
+                announcement.className = 'winner-announcement winner animate';
             }
+            
+            // アニメーション終了後にクラス除去
+            setTimeout(() => {
+                announcement.classList.remove('animate');
+            }, 800);
         }
 
         function updateScore(winner) {
@@ -657,6 +690,8 @@
                 cell.textContent = '';
                 cell.disabled = false;
                 cell.className = 'cell';
+                // 勝利時のアニメーションクラスも除去
+                cell.classList.remove('winning-cell', 'bounce-in', 'fade-in');
             });
             
             // If CPU should go first (player chose X), start CPU move

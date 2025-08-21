@@ -406,6 +406,72 @@ h1 {
     }
 }
 
+/* アニメーションキーフレーム */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes winningGlow {
+    0%, 100% {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        background-color: #ffffff;
+    }
+    50% {
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), 0 0 30px rgba(255, 215, 0, 0.6);
+        background-color: #fff9c4;
+    }
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) rotate(-10deg);
+    }
+    50% {
+        opacity: 1;
+        transform: scale(1.1) rotate(5deg);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1) rotate(0deg);
+    }
+}
+
+/* アニメーションクラス */
+.cell.fade-in {
+    animation: fadeIn 0.4s ease-out;
+}
+
+.cell.bounce-in {
+    animation: bounceIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.cell.winning-cell {
+    animation: winningGlow 1.5s ease-in-out infinite;
+    z-index: 10;
+    position: relative;
+}
+
+.winner-announcement.animate {
+    animation: pulse 0.8s ease-in-out;
+}
+
 /* ランドスケープモード（横向き）の調整 */
 @media (max-height: 500px) and (orientation: landscape) {
     .container {
