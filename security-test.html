@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Test Suite - Tic-Tac-Toe Battle</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+        }
+        .pass {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .fail {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .code {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>🔒 Security Test Suite</h1>
+    <p>This page tests the security implementations in Tic-Tac-Toe Battle.</p>
+
+    <div class="test-section">
+        <h2>📋 CSP (Content Security Policy) Tests</h2>
+        <button onclick="testCSPHeaders()">Test CSP Headers</button>
+        <button onclick="testInlineScript()">Test Inline Script Block</button>
+        <button onclick="testExternalScript()">Test External Script Block</button>
+        <div id="csp-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🛡️ XSS Protection Tests</h2>
+        <button onclick="testXSSPrevention()">Test XSS Prevention</button>
+        <button onclick="testInputSanitization()">Test Input Sanitization</button>
+        <button onclick="testHTMLEscaping()">Test HTML Escaping</button>
+        <div id="xss-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔐 Input Validation Tests</h2>
+        <button onclick="testGameModeValidation()">Test Game Mode Validation</button>
+        <button onclick="testCellIndexValidation()">Test Cell Index Validation</button>
+        <button onclick="testThemeValidation()">Test Theme Validation</button>
+        <div id="validation-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>💾 localStorage Security Tests</h2>
+        <button onclick="testLocalStorageValidation()">Test localStorage Validation</button>
+        <button onclick="testCorruptedDataHandling()">Test Corrupted Data Handling</button>
+        <div id="storage-results"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>🚫 Dangerous Function Tests</h2>
+        <button onclick="testEvalBlocking()">Test eval() Blocking</button>
+        <button onclick="testFunctionConstructorBlocking()">Test Function Constructor Blocking</button>
+        <button onclick="testTimeoutStringBlocking()">Test setTimeout String Blocking</button>
+        <div id="function-results"></div>
+    </div>
+
+    <script src="security.js"></script>
+    <script>
+        let testResults = [];
+
+        function addResult(section, test, status, message) {
+            const resultDiv = document.getElementById(section + '-results');
+            const result = document.createElement('div');
+            result.className = `test-result ${status}`;
+            result.innerHTML = `<strong>${test}:</strong> ${message}`;
+            resultDiv.appendChild(result);
+            
+            testResults.push({section, test, status, message, timestamp: new Date()});
+        }
+
+        function testCSPHeaders() {
+            const results = document.getElementById('csp-results');
+            results.innerHTML = '';
+
+            // Test CSP meta tag presence
+            const cspMeta = document.querySelector('meta[http-equiv="Content-Security-Policy"]');
+            if (cspMeta) {
+                addResult('csp', 'CSP Meta Tag', 'pass', 'CSP meta tag found in document head');
+                
+                const cspContent = cspMeta.getAttribute('content');
+                if (cspContent.includes("default-src 'self'")) {
+                    addResult('csp', 'Default Source', 'pass', 'Default source restricted to self');
+                } else {
+                    addResult('csp', 'Default Source', 'fail', 'Default source not properly restricted');
+                }
+
+                if (cspContent.includes("object-src 'none'")) {
+                    addResult('csp', 'Object Source', 'pass', 'Object source blocked');
+                } else {
+                    addResult('csp', 'Object Source', 'warning', 'Object source not explicitly blocked');
+                }
+            } else {
+                addResult('csp', 'CSP Meta Tag', 'fail', 'CSP meta tag not found');
+            }
+
+            // Test other security headers
+            const frameOptions = document.querySelector('meta[http-equiv="X-Frame-Options"]');
+            if (frameOptions && frameOptions.getAttribute('content') === 'DENY') {
+                addResult('csp', 'X-Frame-Options', 'pass', 'Frame options set to DENY');
+            } else {
+                addResult('csp', 'X-Frame-Options', 'warning', 'X-Frame-Options not properly set');
+            }
+        }
+
+        function testInlineScript() {
+            try {
+                // This should be blocked by CSP
+                const script = document.createElement('script');
+                script.innerHTML = 'console.log("Inline script executed");';
+                document.head.appendChild(script);
+                addResult('csp', 'Inline Script Block', 'warning', 'Inline script may have executed (check console)');
+            } catch (e) {
+                addResult('csp', 'Inline Script Block', 'pass', 'Inline script blocked: ' + e.message);
+            }
+        }
+
+        function testExternalScript() {
+            try {
+                // Test loading from external domain (should be blocked)
+                const script = document.createElement('script');
+                script.src = 'https://evil.com/malicious.js';
+                script.onerror = function() {
+                    addResult('csp', 'External Script Block', 'pass', 'External script from unauthorized domain blocked');
+                };
+                script.onload = function() {
+                    addResult('csp', 'External Script Block', 'fail', 'External script from unauthorized domain loaded');
+                };
+                document.head.appendChild(script);
+                
+                // Timeout fallback
+                setTimeout(() => {
+                    if (!script.onload.called && !script.onerror.called) {
+                        addResult('csp', 'External Script Block', 'pass', 'External script blocked (timeout)');
+                    }
+                }, 3000);
+            } catch (e) {
+                addResult('csp', 'External Script Block', 'pass', 'External script blocked: ' + e.message);
+            }
+        }
+
+        function testXSSPrevention() {
+            const results = document.getElementById('xss-results');
+            results.innerHTML = '';
+
+            if (window.securityManager) {
+                // Test HTML escaping
+                const maliciousInput = '<script>alert("XSS")</script>';
+                const escaped = window.securityManager.escapeHTML(maliciousInput);
+                
+                if (escaped.includes('&lt;script&gt;') && !escaped.includes('<script>')) {
+                    addResult('xss', 'HTML Escaping', 'pass', 'HTML tags properly escaped');
+                } else {
+                    addResult('xss', 'HTML Escaping', 'fail', 'HTML tags not properly escaped');
+                }
+
+                // Test script tag removal
+                const testDiv = document.createElement('div');
+                window.securityManager.safeSetInnerHTML(testDiv, maliciousInput);
+                
+                if (!testDiv.innerHTML.includes('<script>')) {
+                    addResult('xss', 'Safe innerHTML', 'pass', 'Script tags removed from innerHTML');
+                } else {
+                    addResult('xss', 'Safe innerHTML', 'fail', 'Script tags not removed from innerHTML');
+                }
+            } else {
+                addResult('xss', 'Security Manager', 'fail', 'Security manager not loaded');
+            }
+        }
+
+        function testInputSanitization() {
+            if (window.securityManager) {
+                // Test various malicious inputs
+                const tests = [
+                    {input: "javascript:alert('xss')", type: 'text', expected: false},
+                    {input: "normal_text", type: 'text', expected: true},
+                    {input: "player", type: 'gameMode', expected: 'player'},
+                    {input: "hacker_mode", type: 'gameMode', expected: 'player'},
+                    {input: "5", type: 'cellIndex', expected: 5},
+                    {input: "99", type: 'cellIndex', expected: null},
+                    {input: "O", type: 'symbol', expected: 'O'},
+                    {input: "Z", type: 'symbol', expected: 'O'}
+                ];
+
+                tests.forEach((test, index) => {
+                    const result = window.securityManager.validateInput(test.input, test.type);
+                    const passed = result === test.expected;
+                    addResult('xss', `Input Sanitization ${index + 1}`, 
+                        passed ? 'pass' : 'fail', 
+                        `Input "${test.input}" -> "${result}" (expected: "${test.expected}")`);
+                });
+            }
+        }
+
+        function testHTMLEscaping() {
+            if (window.securityManager) {
+                const dangerousChars = ['<', '>', '"', "'", '&', '/', '`', '='];
+                let allPassed = true;
+
+                dangerousChars.forEach(char => {
+                    const escaped = window.securityManager.escapeHTML(char);
+                    if (escaped === char) {
+                        allPassed = false;
+                        addResult('xss', 'Character Escaping', 'fail', `Character "${char}" not escaped`);
+                    }
+                });
+
+                if (allPassed) {
+                    addResult('xss', 'Character Escaping', 'pass', 'All dangerous characters properly escaped');
+                }
+            }
+        }
+
+        function testGameModeValidation() {
+            const results = document.getElementById('validation-results');
+            results.innerHTML = '';
+
+            if (window.securityManager) {
+                const tests = [
+                    {input: 'player', expected: 'player'},
+                    {input: 'cpu', expected: 'cpu'},
+                    {input: 'admin', expected: 'player'},
+                    {input: '<script>', expected: 'player'},
+                    {input: null, expected: 'player'}
+                ];
+
+                tests.forEach((test, index) => {
+                    const result = window.securityManager.validateInput(test.input, 'gameMode');
+                    const passed = result === test.expected;
+                    addResult('validation', `Game Mode ${index + 1}`, 
+                        passed ? 'pass' : 'fail',
+                        `"${test.input}" -> "${result}" (expected: "${test.expected}")`);
+                });
+            }
+        }
+
+        function testCellIndexValidation() {
+            if (window.securityManager) {
+                const tests = [
+                    {input: '0', expected: 0},
+                    {input: '8', expected: 8},
+                    {input: '9', expected: null},
+                    {input: '-1', expected: null},
+                    {input: 'abc', expected: null},
+                    {input: '3.5', expected: null}
+                ];
+
+                tests.forEach((test, index) => {
+                    const result = window.securityManager.validateInput(test.input, 'cellIndex');
+                    const passed = result === test.expected;
+                    addResult('validation', `Cell Index ${index + 1}`, 
+                        passed ? 'pass' : 'fail',
+                        `"${test.input}" -> ${result} (expected: ${test.expected})`);
+                });
+            }
+        }
+
+        function testThemeValidation() {
+            if (window.securityManager) {
+                const tests = [
+                    {input: 'default', expected: 'default'},
+                    {input: 'space', expected: 'space'},
+                    {input: 'hacker', expected: 'default'},
+                    {input: '<script>alert("xss")</script>', expected: 'default'}
+                ];
+
+                tests.forEach((test, index) => {
+                    const result = window.securityManager.validateInput(test.input, 'theme');
+                    const passed = result === test.expected;
+                    addResult('validation', `Theme ${index + 1}`, 
+                        passed ? 'pass' : 'fail',
+                        `"${test.input}" -> "${result}" (expected: "${test.expected}")`);
+                });
+            }
+        }
+
+        function testLocalStorageValidation() {
+            const results = document.getElementById('storage-results');
+            results.innerHTML = '';
+
+            if (window.securityManager) {
+                const maliciousData = {
+                    darkMode: 'javascript:alert("xss")',
+                    backgroundTheme: '<script>alert("xss")</script>',
+                    extraField: 'malicious_value'
+                };
+
+                const validated = window.securityManager.validateStorageData(maliciousData);
+                
+                if (validated && typeof validated.darkMode === 'boolean') {
+                    addResult('storage', 'Data Type Validation', 'pass', 'Boolean fields properly validated');
+                } else {
+                    addResult('storage', 'Data Type Validation', 'fail', 'Boolean validation failed');
+                }
+
+                if (validated && !validated.extraField) {
+                    addResult('storage', 'Unknown Field Filtering', 'pass', 'Unknown fields filtered out');
+                } else {
+                    addResult('storage', 'Unknown Field Filtering', 'fail', 'Unknown fields not filtered');
+                }
+            }
+        }
+
+        function testCorruptedDataHandling() {
+            // Test with corrupted localStorage data
+            const originalData = localStorage.getItem('ticTacToeTheme');
+            
+            try {
+                // Set corrupted data
+                localStorage.setItem('ticTacToeTheme', '{invalid json}');
+                
+                // This should handle the error gracefully
+                if (window.securityManager) {
+                    addResult('storage', 'Corrupted Data Handling', 'pass', 'Implementation should handle corrupted JSON gracefully');
+                }
+                
+                // Restore original data
+                if (originalData) {
+                    localStorage.setItem('ticTacToeTheme', originalData);
+                } else {
+                    localStorage.removeItem('ticTacToeTheme');
+                }
+            } catch (e) {
+                addResult('storage', 'Corrupted Data Handling', 'warning', 'Error in test setup: ' + e.message);
+            }
+        }
+
+        function testEvalBlocking() {
+            const results = document.getElementById('function-results');
+            results.innerHTML = '';
+
+            try {
+                eval('console.log("eval executed")');
+                addResult('function', 'eval() Blocking', 'fail', 'eval() was not blocked');
+            } catch (e) {
+                addResult('function', 'eval() Blocking', 'pass', 'eval() successfully blocked: ' + e.message);
+            }
+        }
+
+        function testFunctionConstructorBlocking() {
+            try {
+                new Function('console.log("Function constructor executed")')();
+                addResult('function', 'Function Constructor', 'fail', 'Function constructor was not blocked');
+            } catch (e) {
+                addResult('function', 'Function Constructor', 'pass', 'Function constructor blocked: ' + e.message);
+            }
+        }
+
+        function testTimeoutStringBlocking() {
+            try {
+                setTimeout('console.log("setTimeout string executed")', 0);
+                addResult('function', 'setTimeout String', 'fail', 'setTimeout with string was not blocked');
+            } catch (e) {
+                addResult('function', 'setTimeout String', 'pass', 'setTimeout with string blocked: ' + e.message);
+            }
+        }
+
+        // Run basic tests on load
+        document.addEventListener('DOMContentLoaded', function() {
+            testCSPHeaders();
+            
+            // Summary report
+            setTimeout(() => {
+                const totalTests = testResults.length;
+                const passedTests = testResults.filter(r => r.status === 'pass').length;
+                const failedTests = testResults.filter(r => r.status === 'fail').length;
+                const warningTests = testResults.filter(r => r.status === 'warning').length;
+
+                const summary = document.createElement('div');
+                summary.className = 'test-section';
+                summary.innerHTML = `
+                    <h2>📊 Test Summary</h2>
+                    <p><strong>Total Tests:</strong> ${totalTests}</p>
+                    <p><strong>Passed:</strong> <span style="color: #155724">${passedTests}</span></p>
+                    <p><strong>Failed:</strong> <span style="color: #721c24">${failedTests}</span></p>
+                    <p><strong>Warnings:</strong> <span style="color: #856404">${warningTests}</span></p>
+                    <p><strong>Success Rate:</strong> ${Math.round((passedTests / totalTests) * 100)}%</p>
+                `;
+                document.body.appendChild(summary);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

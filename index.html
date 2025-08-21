@@ -3,8 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' data: blob:; connect-src 'self' http://localhost:50021 ws://localhost:*; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none';">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin">
     <title>Tic-Tac-Toe Battle</title>
     <link rel="stylesheet" href="style.css">
+    <script src="security.js"></script>
     <script src="claude_voice.js"></script>
 </head>
 <body>
@@ -475,7 +481,9 @@
         }
 
         function setGameMode(mode) {
-            gameMode = mode;
+            // Security: Validate input
+            const validatedMode = window.securityManager ? window.securityManager.validateInput(mode, 'gameMode') : mode;
+            gameMode = validatedMode;
             if (voiceNotificationsEnabled && window.claudeVoice) {
                 window.claudeVoice.notify(mode === 'player' ? '2人プレイモードに変更しました' : 'CPU対戦モードに変更しました');
             }
@@ -502,7 +510,9 @@
         }
 
         function setDifficulty(difficulty) {
-            cpuDifficulty = difficulty;
+            // Security: Validate input
+            const validatedDifficulty = window.securityManager ? window.securityManager.validateInput(difficulty, 'difficulty') : difficulty;
+            cpuDifficulty = validatedDifficulty;
             document.getElementById('hardBtn').classList.toggle('active', difficulty === 'hard');
             document.getElementById('easyBtn').classList.toggle('active', difficulty === 'easy');
             
@@ -523,8 +533,10 @@
         }
 
         function setPlayerSymbol(symbol) {
-            playerSymbol = symbol;
-            cpuSymbol = symbol === 'O' ? 'X' : 'O';
+            // Security: Validate input
+            const validatedSymbol = window.securityManager ? window.securityManager.validateInput(symbol, 'symbol') : symbol;
+            playerSymbol = validatedSymbol;
+            cpuSymbol = validatedSymbol === 'O' ? 'X' : 'O';
             
             document.getElementById('symbolOBtn').classList.toggle('active', symbol === 'O');
             document.getElementById('symbolXBtn').classList.toggle('active', symbol === 'X');
@@ -558,9 +570,12 @@
 
         function handleCellClick(event) {
             const clickedCell = event.target;
-            const clickedCellIndex = parseInt(clickedCell.getAttribute('data-index'));
+            const rawIndex = clickedCell.getAttribute('data-index');
+            // Security: Validate cell index
+            const clickedCellIndex = window.securityManager ? window.securityManager.validateInput(rawIndex, 'cellIndex') : parseInt(rawIndex);
 
-            if (gameBoard[clickedCellIndex] !== '' || !gameActive) {
+            // Security: Check for null/invalid index
+            if (clickedCellIndex === null || gameBoard[clickedCellIndex] !== '' || !gameActive) {
                 return;
             }
 
@@ -831,7 +846,9 @@
         }
 
         function setBackgroundTheme(theme) {
-            backgroundTheme = theme;
+            // Security: Validate input
+            const validatedTheme = window.securityManager ? window.securityManager.validateInput(theme, 'theme') : theme;
+            backgroundTheme = validatedTheme;
             updateBackgroundTheme();
             saveThemeSettings();
         }
@@ -967,13 +984,23 @@
         function loadThemeSettings() {
             const savedSettings = localStorage.getItem('ticTacToeTheme');
             if (savedSettings) {
-                const settings = JSON.parse(savedSettings);
-                isDarkMode = settings.darkMode || false;
-                isColorBlindMode = settings.colorBlindMode || false;
-                backgroundTheme = settings.backgroundTheme || 'default';
-                updateTheme();
-                updateColorBlindMode();
-                updateBackgroundTheme();
+                try {
+                    const rawSettings = JSON.parse(savedSettings);
+                    // Security: Validate localStorage data
+                    const settings = window.securityManager ? window.securityManager.validateStorageData(rawSettings) : rawSettings;
+                    if (settings) {
+                        isDarkMode = settings.darkMode || false;
+                        isColorBlindMode = settings.colorBlindMode || false;
+                        backgroundTheme = settings.backgroundTheme || 'default';
+                        updateTheme();
+                        updateColorBlindMode();
+                        updateBackgroundTheme();
+                    }
+                } catch (e) {
+                    // Security: Handle corrupted localStorage data
+                    console.warn('Invalid theme settings data, using defaults');
+                    localStorage.removeItem('ticTacToeTheme');
+                }
             }
         }
 

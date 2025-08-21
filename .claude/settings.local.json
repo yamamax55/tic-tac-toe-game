@@ -11,7 +11,8 @@
       "Bash(gh api:*)",
       "Bash(python:*)",
       "Bash(rm:*)",
-      "Bash(powershell:*)"
+      "Bash(powershell:*)",
+      "Bash(timeout 3 curl -s http://localhost:8002/security-test.html)"
     ],
     "deny": [],
     "ask": []

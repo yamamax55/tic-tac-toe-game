@@ -60,6 +60,11 @@ A modern and beautiful tic-tac-toe game with dark mode, color-blind accessibilit
   - Web Audio API (audio system)
   - LocalStorage (settings storage)
   - DOM Manipulation (dynamic UI)
+- **Security Features**:
+  - Content Security Policy (CSP)
+  - XSS Protection with input sanitization
+  - Secure localStorage validation
+  - Dangerous function blocking
 - **GitHub Pages**: Static site hosting
 
 ## 🎮 How to Play
@@ -110,7 +115,12 @@ python -m http.server 8000
 tic-tac-toe-game/
 ├── index.html          # Main HTML file
 ├── style.css           # Stylesheet
+├── security.js         # Security protection module
+├── claude_voice.js     # Voice notification system
+├── voice_notify.ps1    # VOICEVOX PowerShell script
+├── security-test.html  # Security test suite
 ├── README.md           # Project documentation
+├── SECURITY.md         # Security implementation guide
 └── CLAUDE.md           # Claude AI development guide
 ```
 
