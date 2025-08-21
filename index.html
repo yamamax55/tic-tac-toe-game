@@ -29,6 +29,28 @@
             <button class="mode-button" id="vsCpuBtn" onclick="setGameMode('cpu')">対CPU</button>
         </div>
         
+        <div class="background-theme-selection">
+            <div style="margin-bottom: 10px;">背景テーマ:</div>
+            <div class="theme-options">
+                <button class="bg-theme-button active" id="defaultTheme" onclick="setBackgroundTheme('default')">
+                    <span class="theme-preview default-preview"></span>
+                    デフォルト
+                </button>
+                <button class="bg-theme-button" id="spaceTheme" onclick="setBackgroundTheme('space')">
+                    <span class="theme-preview space-preview"></span>
+                    宇宙
+                </button>
+                <button class="bg-theme-button" id="oceanTheme" onclick="setBackgroundTheme('ocean')">
+                    <span class="theme-preview ocean-preview"></span>
+                    海
+                </button>
+                <button class="bg-theme-button" id="forestTheme" onclick="setBackgroundTheme('forest')">
+                    <span class="theme-preview forest-preview"></span>
+                    森
+                </button>
+            </div>
+        </div>
+        
         <div class="symbol-selection" id="symbolSelection">
             <div style="margin-bottom: 10px;">あなたのシンボルを選択:</div>
             <button class="symbol-button active" id="symbolOBtn" onclick="setPlayerSymbol('O')">◯ (先攻)</button>
@@ -59,6 +81,9 @@
         </div>
 
         <div id="winnerAnnouncement" class="winner-announcement" style="display: none;"></div>
+        
+        <!-- パーティクル効果用コンテナ -->
+        <div id="particleContainer" class="particle-container"></div>
 
         <button class="reset-button" onclick="resetGame()">新しいゲーム</button>
 
@@ -91,6 +116,7 @@
         // Theme System
         let isDarkMode = false;
         let isColorBlindMode = false;
+        let backgroundTheme = 'default';
 
         // Audio System
         let audioContext;
@@ -598,6 +624,7 @@
                 setTimeout(() => {
                     announceWinner(winnerText);
                     playWinSound();
+                    createVictoryParticles(); // パーティクル効果を追加
                 }, 500);
                 
                 gameActive = false;
@@ -763,14 +790,150 @@
             localStorage.setItem('ticTacToeTheme', JSON.stringify(settings));
         }
 
+        function setBackgroundTheme(theme) {
+            backgroundTheme = theme;
+            updateBackgroundTheme();
+            saveThemeSettings();
+        }
+
+        function updateBackgroundTheme() {
+            const body = document.body;
+            const themeButtons = document.querySelectorAll('.bg-theme-button');
+            
+            // Remove all theme classes
+            body.classList.remove('space-theme', 'ocean-theme', 'forest-theme');
+            themeButtons.forEach(btn => btn.classList.remove('active'));
+            
+            // Add current theme class
+            if (backgroundTheme !== 'default') {
+                body.classList.add(`${backgroundTheme}-theme`);
+            }
+            
+            // Update active button
+            const activeButton = document.getElementById(`${backgroundTheme}Theme`);
+            if (activeButton) {
+                activeButton.classList.add('active');
+            }
+        }
+
+        function createVictoryParticles() {
+            const container = document.getElementById('particleContainer');
+            const containerRect = container.getBoundingClientRect();
+            
+            // Clear existing particles
+            container.innerHTML = '';
+            
+            // Create different particle effects based on theme
+            if (backgroundTheme === 'space') {
+                createStarParticles(container, containerRect);
+            } else if (backgroundTheme === 'ocean') {
+                createBubbleParticles(container, containerRect);
+            } else if (backgroundTheme === 'forest') {
+                createLeafParticles(container, containerRect);
+            } else {
+                createFireworkParticles(container, containerRect);
+            }
+        }
+
+        function createFireworkParticles(container, rect) {
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#feca57', '#ff9ff3'];
+            
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle firework';
+                    particle.style.left = Math.random() * rect.width + 'px';
+                    particle.style.top = Math.random() * rect.height + 'px';
+                    particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                    container.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 1500);
+                }, i * 100);
+            }
+        }
+
+        function createStarParticles(container, rect) {
+            const stars = ['⭐', '✨', '💫', '🌟'];
+            
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle star';
+                    particle.textContent = stars[Math.floor(Math.random() * stars.length)];
+                    particle.style.left = Math.random() * rect.width + 'px';
+                    particle.style.top = '-20px';
+                    container.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 2000);
+                }, i * 150);
+            }
+        }
+
+        function createBubbleParticles(container, rect) {
+            for (let i = 0; i < 12; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * rect.width + 'px';
+                    particle.style.top = rect.height + 'px';
+                    particle.style.width = (Math.random() * 10 + 5) + 'px';
+                    particle.style.height = particle.style.width;
+                    particle.style.backgroundColor = 'rgba(255, 255, 255, 0.6)';
+                    particle.style.borderRadius = '50%';
+                    particle.style.animation = 'bubble-rise 3s linear forwards';
+                    container.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 3000);
+                }, i * 200);
+            }
+        }
+
+        function createLeafParticles(container, rect) {
+            const leaves = ['🍃', '🌿', '🍀'];
+            
+            for (let i = 0; i < 10; i++) {
+                setTimeout(() => {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.textContent = leaves[Math.floor(Math.random() * leaves.length)];
+                    particle.style.left = Math.random() * rect.width + 'px';
+                    particle.style.top = '-20px';
+                    particle.style.fontSize = '20px';
+                    particle.style.animation = 'leaf-fall 4s ease-out forwards';
+                    container.appendChild(particle);
+                    
+                    setTimeout(() => {
+                        particle.remove();
+                    }, 4000);
+                }, i * 300);
+            }
+        }
+
+        function saveThemeSettings() {
+            const settings = {
+                darkMode: isDarkMode,
+                colorBlindMode: isColorBlindMode,
+                backgroundTheme: backgroundTheme
+            };
+            localStorage.setItem('ticTacToeTheme', JSON.stringify(settings));
+        }
+
         function loadThemeSettings() {
             const savedSettings = localStorage.getItem('ticTacToeTheme');
             if (savedSettings) {
                 const settings = JSON.parse(savedSettings);
                 isDarkMode = settings.darkMode || false;
                 isColorBlindMode = settings.colorBlindMode || false;
+                backgroundTheme = settings.backgroundTheme || 'default';
                 updateTheme();
                 updateColorBlindMode();
+                updateBackgroundTheme();
             }
         }
 
