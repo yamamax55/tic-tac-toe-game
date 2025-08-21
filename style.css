@@ -215,3 +215,205 @@ h1 {
 .audio-button.muted {
     background-color: #dc3545;
 }
+
+/* レスポンシブデザイン - モバイル対応 */
+@media (max-width: 768px) {
+    body {
+        padding: 10px;
+    }
+    
+    .container {
+        max-width: 100%;
+        padding: 15px;
+        margin: 0;
+    }
+    
+    h1 {
+        font-size: 24px;
+        margin-bottom: 15px;
+    }
+    
+    .game-info {
+        font-size: 16px;
+        margin-bottom: 15px;
+    }
+    
+    .game-board {
+        max-width: 90vw;
+        grid-gap: 3px;
+        padding: 3px;
+    }
+    
+    .cell {
+        width: calc(90vw / 3 - 6px);
+        height: calc(90vw / 3 - 6px);
+        max-width: 100px;
+        max-height: 100px;
+        min-width: 60px;
+        min-height: 60px;
+        font-size: 28px;
+        /* タッチ操作の最適化 */
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .mode-button, .symbol-button {
+        padding: 12px 20px;
+        margin: 5px;
+        font-size: 14px;
+        min-height: 44px;
+        min-width: 44px;
+    }
+    
+    .difficulty-button {
+        padding: 10px 16px;
+        margin: 3px;
+        font-size: 13px;
+        min-height: 44px;
+    }
+    
+    .reset-button {
+        padding: 15px 25px;
+        font-size: 16px;
+        min-height: 44px;
+    }
+    
+    .score {
+        flex-direction: column;
+        gap: 8px;
+        text-align: center;
+    }
+    
+    .winner-announcement {
+        font-size: 20px;
+        padding: 15px;
+    }
+    
+    .audio-controls {
+        position: relative;
+        top: 0;
+        right: 0;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+    
+    .audio-button {
+        padding: 8px 12px;
+        font-size: 14px;
+        min-height: 44px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 20px;
+    }
+    
+    .game-info {
+        font-size: 14px;
+    }
+    
+    .cell {
+        font-size: 24px;
+    }
+    
+    .mode-button, .symbol-button {
+        padding: 10px 15px;
+        font-size: 13px;
+    }
+    
+    .difficulty-button {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+    
+    .reset-button {
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+    
+    .winner-announcement {
+        font-size: 18px;
+        padding: 12px;
+    }
+}
+
+/* タッチデバイス専用の最適化 */
+@media (hover: none) and (pointer: coarse) {
+    .cell:hover,
+    .mode-button:hover,
+    .symbol-button:hover,
+    .difficulty-button:hover,
+    .reset-button:hover,
+    .audio-button:hover {
+        background-color: initial;
+    }
+    
+    .cell:active {
+        background-color: #e9ecef;
+        transform: scale(0.95);
+    }
+    
+    .mode-button:active,
+    .symbol-button:active {
+        background-color: #004085;
+        transform: scale(0.95);
+    }
+    
+    .difficulty-button:active {
+        background-color: #495057;
+        transform: scale(0.95);
+    }
+    
+    .reset-button:active {
+        background-color: #1e7e34;
+        transform: scale(0.95);
+    }
+    
+    .audio-button:active {
+        background-color: #495057;
+        transform: scale(0.95);
+    }
+}
+
+/* ランドスケープモード（横向き）の調整 */
+@media (max-height: 500px) and (orientation: landscape) {
+    .container {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+    
+    .game-info {
+        font-size: 14px;
+        margin-bottom: 10px;
+    }
+    
+    .game-board {
+        max-width: 40vh;
+    }
+    
+    .cell {
+        width: calc(40vh / 3 - 6px);
+        height: calc(40vh / 3 - 6px);
+        font-size: 20px;
+    }
+    
+    .mode-selection,
+    .symbol-selection,
+    .difficulty-selection {
+        margin-bottom: 10px;
+    }
+    
+    .winner-announcement {
+        font-size: 16px;
+        padding: 8px;
+    }
+}
