@@ -10,7 +10,8 @@
       "Bash(git mv:*)",
       "Bash(gh api:*)",
       "Bash(python:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(powershell:*)"
     ],
     "deny": [],
     "ask": []

@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tic-Tac-Toe Battle</title>
     <link rel="stylesheet" href="style.css">
+    <script src="claude_voice.js"></script>
 </head>
 <body>
     <div class="audio-controls">
         <button class="audio-button" id="bgmToggle" onclick="toggleBGM()">BGM: ON</button>
         <button class="audio-button" id="sfxToggle" onclick="toggleSFX()">SFX: ON</button>
+        <button class="audio-button" id="voiceToggle" onclick="toggleVoiceNotifications()">VOICE: ON</button>
     </div>
     
     <div class="theme-controls">
@@ -122,6 +124,7 @@
         let audioContext;
         let bgmEnabled = true;
         let sfxEnabled = true;
+        let voiceNotificationsEnabled = true;
         let bgmOscillator = null;
         let bgmGain = null;
 
@@ -329,6 +332,25 @@
             }
         }
 
+        function toggleVoiceNotifications() {
+            voiceNotificationsEnabled = !voiceNotificationsEnabled;
+            const button = document.getElementById('voiceToggle');
+            
+            if (voiceNotificationsEnabled) {
+                button.textContent = 'VOICE: ON';
+                button.classList.remove('muted');
+                if (window.claudeVoice) {
+                    window.claudeVoice.setEnabled(true);
+                }
+            } else {
+                button.textContent = 'VOICE: OFF';
+                button.classList.add('muted');
+                if (window.claudeVoice) {
+                    window.claudeVoice.setEnabled(false);
+                }
+            }
+        }
+
         // Minimax CPU implementation
         function minimax(board, depth, isMaximizing) {
             const winner = checkWinner(board);
@@ -454,6 +476,9 @@
 
         function setGameMode(mode) {
             gameMode = mode;
+            if (voiceNotificationsEnabled && window.claudeVoice) {
+                window.claudeVoice.notify(mode === 'player' ? '2人プレイモードに変更しました' : 'CPU対戦モードに変更しました');
+            }
             document.getElementById('vsPlayerBtn').classList.toggle('active', mode === 'player');
             document.getElementById('vsCpuBtn').classList.toggle('active', mode === 'cpu');
             
@@ -549,6 +574,9 @@
 
         function makeMove(cell, index) {
             playClickSound(); // Play sound when move is made
+            if (voiceNotificationsEnabled && window.claudeVoice) {
+                window.claudeVoice.notify('手を打ちました');
+            }
             updateCell(cell, index);
             const result = checkResult();
             
@@ -616,8 +644,14 @@
                 let winnerText;
                 if (gameMode === 'cpu') {
                     winnerText = currentPlayer === playerSymbol ? 'Human Wins!' : 'CPU Wins!';
+                    if (voiceNotificationsEnabled && window.claudeVoice) {
+                        window.claudeVoice.notify(currentPlayer === playerSymbol ? '人間の勝利です' : 'CPUの勝利です');
+                    }
                 } else {
                     winnerText = `${currentPlayer === 'O' ? '◯' : '×'}の勝利！`;
+                    if (voiceNotificationsEnabled && window.claudeVoice) {
+                        window.claudeVoice.notify(currentPlayer === 'O' ? 'マルの勝利です' : 'バツの勝利です');
+                    }
                 }
                 
                 // Delayed victory announcement
@@ -635,6 +669,9 @@
 
             if (!gameBoard.includes('')) {
                 announceWinner('Draw!');
+                if (voiceNotificationsEnabled && window.claudeVoice) {
+                    window.claudeVoice.notify('引き分けです');
+                }
                 playDrawSound(); // Play draw sound
                 gameActive = false;
                 if (gameMode === 'cpu') {
@@ -714,6 +751,9 @@
         }
 
         function resetGame() {
+            if (voiceNotificationsEnabled && window.claudeVoice) {
+                window.claudeVoice.notify('新しいゲームを開始します');
+            }
             currentPlayer = 'O'; // Always start with O
             gameBoard = ['', '', '', '', '', '', '', '', ''];
             gameActive = true;
