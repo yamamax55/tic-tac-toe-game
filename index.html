@@ -540,7 +540,12 @@
 
         function changePlayer() {
             currentPlayer = currentPlayer === 'O' ? 'X' : 'O';
-            document.getElementById('currentPlayer').textContent = currentPlayer === 'O' ? '◯' : '×';
+            const currentPlayerElement = document.getElementById('currentPlayer');
+            currentPlayerElement.textContent = currentPlayer === 'O' ? '◯' : '×';
+            
+            // プレイヤーの色分けクラスを更新
+            currentPlayerElement.className = 'current-player ' + (currentPlayer === 'O' ? 'player-o' : 'player-x');
+            
             updateCPUIndicator();
         }
 
@@ -640,7 +645,10 @@
             gameBoard = ['', '', '', '', '', '', '', '', ''];
             gameActive = true;
             
-            document.getElementById('currentPlayer').textContent = '◯';
+            const currentPlayerElement = document.getElementById('currentPlayer');
+            currentPlayerElement.textContent = '◯';
+            currentPlayerElement.className = 'current-player player-o';
+            
             document.getElementById('winnerAnnouncement').style.display = 'none';
             updateCPUIndicator();
             
