@@ -241,6 +241,48 @@ h1 {
     background-color: #dc3545;
 }
 
+.theme-controls {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.theme-button {
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    cursor: pointer;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.theme-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+.theme-button:active {
+    transform: translateY(0);
+}
+
+.theme-button#colorBlindToggle {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+}
+
+.theme-button#colorBlindToggle.active {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+}
+
 /* レスポンシブデザイン - モバイル対応 */
 @media (max-width: 768px) {
     body {
@@ -321,6 +363,21 @@ h1 {
         right: 0;
         justify-content: center;
         margin-bottom: 15px;
+    }
+    
+    .theme-controls {
+        position: relative;
+        top: 0;
+        left: 0;
+        flex-direction: row;
+        justify-content: center;
+        margin-bottom: 15px;
+    }
+    
+    .theme-button {
+        width: 44px;
+        height: 44px;
+        font-size: 16px;
     }
     
     .audio-button {
@@ -470,6 +527,138 @@ h1 {
 
 .winner-announcement.animate {
     animation: pulse 0.8s ease-in-out;
+}
+
+/* ダークモードスタイル */
+body.dark-mode {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+}
+
+body.dark-mode .container {
+    background: #2d2d2d;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+body.dark-mode h1 {
+    color: #ffffff;
+}
+
+body.dark-mode .game-board {
+    background-color: #1e1e1e;
+    border-color: #404040;
+}
+
+body.dark-mode .cell {
+    background-color: #3a3a3a;
+    border-color: #505050;
+    color: #ffffff;
+}
+
+body.dark-mode .cell:hover {
+    background-color: #4a4a4a;
+}
+
+body.dark-mode .score {
+    background-color: #3a3a3a;
+}
+
+body.dark-mode .mode-button,
+body.dark-mode .symbol-button {
+    background-color: #404040;
+}
+
+body.dark-mode .mode-button:hover,
+body.dark-mode .symbol-button:hover {
+    background-color: #505050;
+}
+
+body.dark-mode .mode-button.active,
+body.dark-mode .symbol-button.active {
+    background-color: #28a745;
+}
+
+body.dark-mode .difficulty-button {
+    background-color: #505050;
+}
+
+body.dark-mode .difficulty-button:hover {
+    background-color: #606060;
+}
+
+body.dark-mode .difficulty-button.active {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+body.dark-mode .reset-button {
+    background-color: #28a745;
+}
+
+body.dark-mode .reset-button:hover {
+    background-color: #218838;
+}
+
+body.dark-mode .audio-button {
+    background-color: #505050;
+}
+
+body.dark-mode .audio-button:hover {
+    background-color: #606060;
+}
+
+body.dark-mode .winner-announcement.winner {
+    background-color: #2d5016;
+    color: #d4edda;
+}
+
+body.dark-mode .winner-announcement.draw {
+    background-color: #664d03;
+    color: #fff3cd;
+}
+
+/* 色覚異常対応モード */
+body.colorblind-mode .current-player.player-o {
+    background: linear-gradient(135deg, #0077be, #005a8b);
+}
+
+body.colorblind-mode .current-player.player-x {
+    background: linear-gradient(135deg, #d2691e, #a0522d);
+}
+
+body.colorblind-mode .cell.o {
+    color: #0077be;
+}
+
+body.colorblind-mode .cell.x {
+    color: #d2691e;
+}
+
+body.colorblind-mode .mode-button.active,
+body.colorblind-mode .symbol-button.active {
+    background-color: #0077be;
+}
+
+body.colorblind-mode .difficulty-button.active {
+    background-color: #d2691e;
+    color: #ffffff;
+}
+
+body.colorblind-mode .reset-button {
+    background-color: #0077be;
+}
+
+body.colorblind-mode .reset-button:hover {
+    background-color: #005a8b;
+}
+
+/* ダークモード + 色覚異常対応の組み合わせ */
+body.dark-mode.colorblind-mode .current-player.player-o {
+    background: linear-gradient(135deg, #4da6d9, #0077be);
+}
+
+body.dark-mode.colorblind-mode .current-player.player-x {
+    background: linear-gradient(135deg, #ff8c42, #d2691e);
 }
 
 /* ランドスケープモード（横向き）の調整 */

@@ -12,6 +12,15 @@
         <button class="audio-button" id="sfxToggle" onclick="toggleSFX()">SFX: ON</button>
     </div>
     
+    <div class="theme-controls">
+        <button class="theme-button" id="themeToggle" onclick="toggleTheme()">
+            <span id="themeIcon">🌙</span>
+        </button>
+        <button class="theme-button" id="colorBlindToggle" onclick="toggleColorBlindMode()">
+            <span id="colorBlindIcon">👁️</span>
+        </button>
+    </div>
+    
     <div class="container">
         <h1>マルバツバトル</h1>
         
@@ -78,6 +87,10 @@
         let cpuHumanWins = 0;
         let cpuWins = 0;
         let cpuDraws = 0;
+
+        // Theme System
+        let isDarkMode = false;
+        let isColorBlindMode = false;
 
         // Audio System
         let audioContext;
@@ -700,8 +713,72 @@
             }
         }
 
+        // Theme System Functions
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            updateTheme();
+            saveThemeSettings();
+        }
+
+        function toggleColorBlindMode() {
+            isColorBlindMode = !isColorBlindMode;
+            updateColorBlindMode();
+            saveThemeSettings();
+        }
+
+        function updateTheme() {
+            const body = document.body;
+            const themeIcon = document.getElementById('themeIcon');
+            
+            if (isDarkMode) {
+                body.classList.add('dark-mode');
+                themeIcon.textContent = '☀️';
+            } else {
+                body.classList.remove('dark-mode');
+                themeIcon.textContent = '🌙';
+            }
+        }
+
+        function updateColorBlindMode() {
+            const body = document.body;
+            const colorBlindIcon = document.getElementById('colorBlindIcon');
+            const colorBlindToggle = document.getElementById('colorBlindToggle');
+            
+            if (isColorBlindMode) {
+                body.classList.add('colorblind-mode');
+                colorBlindIcon.textContent = '👁️‍🗨️';
+                colorBlindToggle.classList.add('active');
+            } else {
+                body.classList.remove('colorblind-mode');
+                colorBlindIcon.textContent = '👁️';
+                colorBlindToggle.classList.remove('active');
+            }
+        }
+
+        function saveThemeSettings() {
+            const settings = {
+                darkMode: isDarkMode,
+                colorBlindMode: isColorBlindMode
+            };
+            localStorage.setItem('ticTacToeTheme', JSON.stringify(settings));
+        }
+
+        function loadThemeSettings() {
+            const savedSettings = localStorage.getItem('ticTacToeTheme');
+            if (savedSettings) {
+                const settings = JSON.parse(savedSettings);
+                isDarkMode = settings.darkMode || false;
+                isColorBlindMode = settings.colorBlindMode || false;
+                updateTheme();
+                updateColorBlindMode();
+            }
+        }
+
         // イベントリスナーの設定
         document.addEventListener('DOMContentLoaded', function() {
+            // Load theme settings first
+            loadThemeSettings();
+            
             const cells = document.querySelectorAll('.cell');
             cells.forEach(cell => {
                 cell.addEventListener('click', handleCellClick);
