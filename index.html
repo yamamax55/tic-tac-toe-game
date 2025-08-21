@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>マルバツバトル</title>
+    <title>Tic-Tac-Toe Battle</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -22,49 +22,49 @@
     </div>
     
     <div class="container">
-        <h1>マルバツバトル</h1>
+        <h1>Tic-Tac-Toe Battle</h1>
         
         <div class="mode-selection">
-            <button class="mode-button active" id="vsPlayerBtn" onclick="setGameMode('player')">2人プレイ</button>
-            <button class="mode-button" id="vsCpuBtn" onclick="setGameMode('cpu')">対CPU</button>
+            <button class="mode-button active" id="vsPlayerBtn" onclick="setGameMode('player')">2 Players</button>
+            <button class="mode-button" id="vsCpuBtn" onclick="setGameMode('cpu')">vs CPU</button>
         </div>
         
         <div class="background-theme-selection">
-            <div style="margin-bottom: 10px;">背景テーマ:</div>
+            <div style="margin-bottom: 10px;">Background Theme:</div>
             <div class="theme-options">
                 <button class="bg-theme-button active" id="defaultTheme" onclick="setBackgroundTheme('default')">
                     <span class="theme-preview default-preview"></span>
-                    デフォルト
+                    Default
                 </button>
                 <button class="bg-theme-button" id="spaceTheme" onclick="setBackgroundTheme('space')">
                     <span class="theme-preview space-preview"></span>
-                    宇宙
+                    Space
                 </button>
                 <button class="bg-theme-button" id="oceanTheme" onclick="setBackgroundTheme('ocean')">
                     <span class="theme-preview ocean-preview"></span>
-                    海
+                    Ocean
                 </button>
                 <button class="bg-theme-button" id="forestTheme" onclick="setBackgroundTheme('forest')">
                     <span class="theme-preview forest-preview"></span>
-                    森
+                    Forest
                 </button>
             </div>
         </div>
         
         <div class="symbol-selection" id="symbolSelection">
-            <div style="margin-bottom: 10px;">あなたのシンボルを選択:</div>
-            <button class="symbol-button active" id="symbolOBtn" onclick="setPlayerSymbol('O')">◯ (先攻)</button>
-            <button class="symbol-button" id="symbolXBtn" onclick="setPlayerSymbol('X')">× (後攻)</button>
+            <div style="margin-bottom: 10px;">Choose Your Symbol:</div>
+            <button class="symbol-button active" id="symbolOBtn" onclick="setPlayerSymbol('O')">◯ (First)</button>
+            <button class="symbol-button" id="symbolXBtn" onclick="setPlayerSymbol('X')">× (Second)</button>
         </div>
         
         <div class="difficulty-selection" id="difficultySelection">
-            <div style="margin-bottom: 10px;">CPU難易度を選択:</div>
-            <button class="difficulty-button active" id="hardBtn" onclick="setDifficulty('hard')">最強</button>
-            <button class="difficulty-button" id="easyBtn" onclick="setDifficulty('easy')">接待モード</button>
+            <div style="margin-bottom: 10px;">Select CPU Difficulty:</div>
+            <button class="difficulty-button active" id="hardBtn" onclick="setDifficulty('hard')">Expert</button>
+            <button class="difficulty-button" id="easyBtn" onclick="setDifficulty('easy')">Beginner</button>
         </div>
         
         <div class="game-info">
-            <div>現在のプレイヤー: <span class="current-player" id="currentPlayer">◯</span><span id="aiIndicator" class="ai-indicator" style="display: none;">(CPU)</span></div>
+            <div>Current Player: <span class="current-player" id="currentPlayer">◯</span><span id="aiIndicator" class="ai-indicator" style="display: none;">(CPU)</span></div>
             <div id="difficultyDisplay" style="display: none; font-size: 14px; color: #6c757d; margin-top: 5px;"></div>
         </div>
 
@@ -85,12 +85,12 @@
         <!-- パーティクル効果用コンテナ -->
         <div id="particleContainer" class="particle-container"></div>
 
-        <button class="reset-button" onclick="resetGame()">新しいゲーム</button>
+        <button class="reset-button" onclick="resetGame()">New Game</button>
 
         <div class="score">
-            <div><span id="scoreLabel1">Player1の勝利</span>: <span id="score1">0</span></div>
-            <div>引き分け: <span id="drawScore">0</span></div>
-            <div><span id="scoreLabel2">Player2の勝利</span>: <span id="score2">0</span></div>
+            <div><span id="scoreLabel1">Player1 Wins</span>: <span id="score1">0</span></div>
+            <div>Draw: <span id="drawScore">0</span></div>
+            <div><span id="scoreLabel2">Player2 Wins</span>: <span id="score2">0</span></div>
         </div>
     </div>
 
@@ -103,12 +103,12 @@
         let cpuSymbol = 'X'; // CPU's symbol
         let cpuDifficulty = 'hard'; // 'hard' for perfect CPU, 'easy' for easy mode
         
-        // 2人プレイ用戦績
+        // 2-player mode scores
         let pvpPlayerOWins = 0;
         let pvpPlayerXWins = 0;
         let pvpDraws = 0;
         
-        // CPU対戦用戦績
+        // CPU battle scores
         let cpuHumanWins = 0;
         let cpuWins = 0;
         let cpuDraws = 0;
@@ -491,7 +491,7 @@
             const difficultyDisplay = document.getElementById('difficultyDisplay');
             if (gameMode === 'cpu') {
                 difficultyDisplay.style.display = 'block';
-                difficultyDisplay.textContent = `CPU難易度: ${cpuDifficulty === 'hard' ? '最強' : '接待モード'}`;
+                difficultyDisplay.textContent = `CPU Difficulty: ${cpuDifficulty === 'hard' ? 'Expert' : 'Beginner'}`;
             } else {
                 difficultyDisplay.style.display = 'none';
             }
@@ -513,11 +513,11 @@
             const label2 = document.getElementById('scoreLabel2');
             
             if (gameMode === 'cpu') {
-                label1.textContent = '人間の勝利';
-                label2.textContent = 'CPUの勝利';
+                label1.textContent = 'Human Wins';
+                label2.textContent = 'CPU Wins';
             } else {
-                label1.textContent = '◯の勝利';
-                label2.textContent = '×の勝利';
+                label1.textContent = '◯ Wins';
+                label2.textContent = '× Wins';
             }
             updateScoreDisplay(); // スコア表示も更新
         }
@@ -576,10 +576,10 @@
             cell.classList.add(currentPlayer.toLowerCase());
             cell.disabled = true;
             
-            // シンボル配置時のアニメーション
+            // Symbol placement animation
             cell.classList.add('bounce-in');
             
-            // アニメーション終了後にクラスを除去
+            // Remove animation class after completion
             setTimeout(() => {
                 cell.classList.remove('bounce-in');
             }, 600);
@@ -590,7 +590,7 @@
             const currentPlayerElement = document.getElementById('currentPlayer');
             currentPlayerElement.textContent = currentPlayer === 'O' ? '◯' : '×';
             
-            // プレイヤーの色分けクラスを更新
+            // Update player color classification class
             currentPlayerElement.className = 'current-player ' + (currentPlayer === 'O' ? 'player-o' : 'player-x');
             
             updateCPUIndicator();
@@ -610,21 +610,21 @@
             }
 
             if (roundWon) {
-                // 勝利セルのアニメーション
+                // Winning cell animation
                 highlightWinningCells(winningLine);
                 
                 let winnerText;
                 if (gameMode === 'cpu') {
-                    winnerText = currentPlayer === playerSymbol ? '人間の勝利！' : 'CPUの勝利！';
+                    winnerText = currentPlayer === playerSymbol ? 'Human Wins!' : 'CPU Wins!';
                 } else {
                     winnerText = `${currentPlayer === 'O' ? '◯' : '×'}の勝利！`;
                 }
                 
-                // 少し遅延させて勝利発表
+                // Delayed victory announcement
                 setTimeout(() => {
                     announceWinner(winnerText);
                     playWinSound();
-                    createVictoryParticles(); // パーティクル効果を追加
+                    createVictoryParticles(); // Add particle effects
                 }, 500);
                 
                 gameActive = false;
@@ -634,7 +634,7 @@
             }
 
             if (!gameBoard.includes('')) {
-                announceWinner('引き分け！');
+                announceWinner('Draw!');
                 playDrawSound(); // Play draw sound
                 gameActive = false;
                 if (gameMode === 'cpu') {
@@ -655,7 +655,7 @@
                 const cell = document.querySelector(`[data-index="${cellIndex}"]`);
                 setTimeout(() => {
                     cell.classList.add('winning-cell');
-                }, index * 100); // 順番に光らせる
+                }, index * 100); // Light up in sequence
             });
         }
 
@@ -664,13 +664,13 @@
             announcement.textContent = message;
             announcement.style.display = 'block';
             
-            if (message.includes('引き分け')) {
+            if (message.includes('Draw')) {
                 announcement.className = 'winner-announcement draw animate';
             } else {
                 announcement.className = 'winner-announcement winner animate';
             }
             
-            // アニメーション終了後にクラス除去
+            // Remove animation class after completion
             setTimeout(() => {
                 announcement.classList.remove('animate');
             }, 800);
@@ -730,7 +730,7 @@
                 cell.textContent = '';
                 cell.disabled = false;
                 cell.className = 'cell';
-                // 勝利時のアニメーションクラスも除去
+                // Also remove victory animation classes
                 cell.classList.remove('winning-cell', 'bounce-in', 'fade-in');
             });
             
@@ -937,7 +937,7 @@
             }
         }
 
-        // イベントリスナーの設定
+        // Event listener setup
         document.addEventListener('DOMContentLoaded', function() {
             // Load theme settings first
             loadThemeSettings();

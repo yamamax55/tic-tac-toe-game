@@ -1,151 +1,151 @@
-# 🎮 マルバツバトル (Tic-Tac-Toe Battle)
+# 🎮 Tic-Tac-Toe Battle (マルバツバトル)
 
-モダンで美しいデザインの三目並べゲーム。ダークモード、色覚異常対応、アニメーション効果、音響システムを備えた本格的なWebアプリケーションです。
+A modern and beautiful tic-tac-toe game with dark mode, color-blind accessibility, animation effects, and audio system - a comprehensive web application.
 
-## 🚀 デモ
+## 🚀 Demo
 
-**▶️ [ゲームをプレイする](https://yamamax55.github.io/tic-tac-toe-game/)**
+**▶️ [Play the Game](https://yamamax55.github.io/tic-tac-toe-game/)**
 
-## ✨ 特徴
+## ✨ Features
 
-### 🎯 ゲームモード
-- **2人プレイ**: 友達と一緒にプレイ
-- **対CPU**: 2つの難易度レベル
-  - **最強モード**: Minimaxアルゴリズムによる完璧なAI
-  - **接待モード**: 適度な強さで楽しめるAI
+### 🎯 Game Modes
+- **2 Players**: Play with friends
+- **vs CPU**: Two difficulty levels
+  - **Expert Mode**: Perfect AI using Minimax algorithm
+  - **Beginner Mode**: AI with moderate difficulty for enjoyable play
 
-### 🎨 テーマ・ビジュアル
-- **ライト/ダークモード**: 🌙☀️ ワンクリックで切り替え
-- **色覚異常対応**: 👁️ 赤緑色覚異常に配慮した青/オレンジ配色
-- **4種類の背景テーマ**: 
-  - 🌟 **宇宙**: きらめく星と深宇宙のグラデーション
-  - 🌊 **海**: 波動エフェクトと青のグラデーション
-  - 🌲 **森**: 緑の呼吸するような自然背景
-  - ⚪ **デフォルト**: クリーンで洗練されたデザイン
-- **レスポンシブデザイン**: 📱 モバイル・タブレット完全対応
-- **タッチ操作最適化**: 44px以上のタップ領域
+### 🎨 Themes & Visual Design
+- **Light/Dark Mode**: 🌙☀️ One-click toggle
+- **Color-Blind Support**: 👁️ Blue/orange color scheme for red-green color blindness
+- **4 Background Themes**: 
+  - 🌟 **Space**: Twinkling stars and deep space gradient
+  - 🌊 **Ocean**: Wave effects and blue gradient
+  - 🌲 **Forest**: Green breathing natural background
+  - ⚪ **Default**: Clean and refined design
+- **Responsive Design**: 📱 Full mobile and tablet support
+- **Touch Optimization**: Tap areas 44px or larger
 
-### 🎬 アニメーション・演出
-- **シンボル配置**: バウンス＆回転アニメーション
-- **勝利演出**: 勝利ラインが順番に光る
-- **テーマ別パーティクル効果**: 勝利時の美しい演出
-  - 🎆 **デフォルト**: カラフルな花火爆発
-  - ⭐ **宇宙**: 星の雨（⭐✨💫🌟）
-  - 💧 **海**: 泡の上昇エフェクト
-  - 🍃 **森**: 葉の舞い散り（🍃🌿🍀）
-- **ホバー効果**: セルの浮き上がり演出
-- **勝利発表**: パルスアニメーション
+### 🎬 Animations & Effects
+- **Symbol Placement**: Bounce & rotation animations
+- **Victory Effects**: Winning line lights up sequentially
+- **Theme-specific Particle Effects**: Beautiful victory animations
+  - 🎆 **Default**: Colorful firework explosions
+  - ⭐ **Space**: Star rain (⭐✨💫🌟)
+  - 💧 **Ocean**: Bubble rising effects
+  - 🍃 **Forest**: Falling leaves (🍃🌿🍀)
+- **Hover Effects**: Cell floating animations
+- **Victory Announcement**: Pulse animations
 
-### 🔊 音響システム
-- **BGM**: 美しいコード進行による環境音楽
-- **効果音**: クリック音、勝利音、引き分け音
-- **音量制御**: BGM/SFXの個別ON/OFF
+### 🔊 Audio System
+- **BGM**: Ambient music with beautiful chord progressions
+- **Sound Effects**: Click sounds, victory sounds, draw sounds
+- **Volume Control**: Individual BGM/SFX on/off
 
-### 📊 スコア・統計
-- **詳細スコア**: プレイヤー別・モード別の勝利数記録
-- **引き分け記録**: 引き分けゲームもカウント
-- **リアルタイム更新**: ゲーム終了と同時にスコア更新
+### 📊 Score & Statistics
+- **Detailed Scores**: Win records by player and mode
+- **Draw Records**: Draw games also counted
+- **Real-time Updates**: Scores update immediately upon game completion
 
-## 🛠️ 技術スタック
+## 🛠️ Technology Stack
 
-- **HTML5**: セマンティックマークアップ
+- **HTML5**: Semantic markup
 - **CSS3**: 
-  - CSS Grid Layout (ゲームボード)
-  - Flexbox (レスポンシブレイアウト)
-  - CSS Animations (キーフレームアニメーション)
-  - CSS Variables (テーマ切り替え)
-  - Media Queries (レスポンシブ対応)
+  - CSS Grid Layout (game board)
+  - Flexbox (responsive layout)
+  - CSS Animations (keyframe animations)
+  - CSS Variables (theme switching)
+  - Media Queries (responsive design)
 - **Vanilla JavaScript**:
-  - Minimax Algorithm (AI実装)
-  - Web Audio API (音響システム)
-  - LocalStorage (設定保存)
-  - DOM Manipulation (動的UI)
-- **GitHub Pages**: 静的サイトホスティング
+  - Minimax Algorithm (AI implementation)
+  - Web Audio API (audio system)
+  - LocalStorage (settings storage)
+  - DOM Manipulation (dynamic UI)
+- **GitHub Pages**: Static site hosting
 
-## 🎮 使い方
+## 🎮 How to Play
 
-### 基本操作
-1. **ゲームモード選択**: 2人プレイまたは対CPU
-2. **CPU戦設定** (対CPUの場合):
-   - シンボル選択: ◯(先攻) または ×(後攻)
-   - 難易度選択: 最強 または 接待モード
-3. **ゲーム開始**: セルをクリックしてシンボルを配置
-4. **勝利条件**: 縦・横・斜めのいずれかに3つ並べる
+### Basic Operations
+1. **Game Mode Selection**: 2 Players or vs CPU
+2. **CPU Battle Settings** (for vs CPU):
+   - Symbol Selection: ◯ (First) or × (Second)
+   - Difficulty Selection: Expert or Beginner
+3. **Game Start**: Click cells to place symbols
+4. **Winning Condition**: Align 3 symbols vertically, horizontally, or diagonally
 
-### テーマ設定
-- **🌙/☀️ ボタン**: ダークモード切り替え
-- **👁️ ボタン**: 色覚異常対応モード切り替え
-- **背景テーマ選択**: デフォルト・宇宙・海・森から選択
-- 設定は自動的に保存され、次回アクセス時も維持されます
+### Theme Settings
+- **🌙/☀️ Button**: Dark mode toggle
+- **👁️ Button**: Color-blind mode toggle
+- **Background Theme Selection**: Choose from Default, Space, Ocean, Forest
+- Settings are automatically saved and maintained for future visits
 
-### 音響設定
-- **BGM ボタン**: 背景音楽のON/OFF
-- **SFX ボタン**: 効果音のON/OFF
+### Audio Settings
+- **BGM Button**: Background music on/off
+- **SFX Button**: Sound effects on/off
 
-## 🏗️ ローカル開発
+## 🏗️ Local Development
 
-### 必要な環境
-- モダンなWebブラウザ (Chrome, Firefox, Safari, Edge)
-- ローカルWebサーバー (推奨)
+### Requirements
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Local web server (recommended)
 
-### セットアップ
+### Setup
 
 ```bash
-# リポジトリをクローン
+# Clone repository
 git clone https://github.com/yamamax55/tic-tac-toe-game.git
 
-# プロジェクトディレクトリに移動
+# Move to project directory
 cd tic-tac-toe-game
 
-# ローカルサーバーを起動 (例: Python)
+# Start local server (example: Python)
 python -m http.server 8000
 
-# ブラウザでアクセス
+# Access in browser
 # http://localhost:8000
 ```
 
-### ファイル構成
+### File Structure
 
 ```
 tic-tac-toe-game/
-├── index.html          # メインHTMLファイル
-├── style.css           # スタイルシート
-├── README.md           # プロジェクト説明書
-└── CLAUDE.md           # Claude AI用開発ガイド
+├── index.html          # Main HTML file
+├── style.css           # Stylesheet
+├── README.md           # Project documentation
+└── CLAUDE.md           # Claude AI development guide
 ```
 
-## 🎯 今後の改善予定
+## 🎯 Future Improvements
 
-### 優先度: 高
-- [ ] 4×4ボードモード（より戦略的なゲームプレイ）
-- [ ] カスタムシンボル選択（◯×以外の選択肢）
-- [ ] 詳細統計とグラフ表示（勝率分析・時系列データ）
+### High Priority
+- [ ] 4×4 board mode (more strategic gameplay)
+- [ ] Custom symbol selection (options beyond ◯×)
+- [ ] Detailed statistics and graph display (win rate analysis, time series data)
 
-### 優先度: 中
-- [ ] 実績・バッジシステム（レベル・チャレンジ機能）
-- [ ] PWA対応（オフライン動作・ホーム画面追加）
-- [ ] キーボード操作（アクセシビリティ向上）
+### Medium Priority
+- [ ] Achievement and badge system (levels, challenge features)
+- [ ] PWA support (offline functionality, home screen installation)
+- [ ] Keyboard controls (accessibility improvement)
 
-### 優先度: 低
-- [ ] オンライン対戦機能（WebSocket実装）
-- [ ] 多言語対応（国際化）
-- [ ] 音楽カスタマイズ（BGMの種類選択）
+### Low Priority
+- [ ] Online multiplayer functionality (WebSocket implementation)
+- [ ] Multi-language support (internationalization)
+- [ ] Music customization (BGM type selection)
 
-## 🤝 コントリビューション
+## 🤝 Contributing
 
-プルリクエストやイシューの報告を歓迎します！
+Pull requests and issue reports are welcome!
 
-1. このリポジトリをフォーク
-2. 機能ブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'Add amazing feature'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
-5. プルリクエストを作成
+1. Fork this repository
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Create pull request
 
-## 📝 ライセンス
+## 📝 License
 
-このプロジェクトはMITライセンスの下で公開されています。
+This project is released under the MIT License.
 
-## 👨‍💻 作者
+## 👨‍💻 Author
 
 **yamamax55** - [GitHub](https://github.com/yamamax55)
 
